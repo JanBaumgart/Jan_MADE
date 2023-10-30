@@ -56,7 +56,7 @@ Covid was and still is an important topic of Healthcare and our generation, we s
 
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
-1. Explore Datasources [#1][i1]
+1. Exploring the Datasources [#1][i1]
 2. ...
 
-[i1]: https://github.com/jvalue/made-template/issues/1
+[i1]: https://github.com/JanBaumgart/Jan_MADE/issues/1
