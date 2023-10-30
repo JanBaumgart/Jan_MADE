@@ -7,7 +7,8 @@ Correlation between Covid-19 vaccination rate and school types and regions in Sc
 ## Main Question
 
 <!-- Think about one main question you want to answer based on the data. -->
-1. To what extent does the vaccination rate in Schleswig-Holstein correlate with COVID-19 case numbers in schools, categorized by school type and district, and are there significant differences in this correlation among various school types and regions?
+1. To what extent does the vaccination rate in Schleswig-Holstein correlate with COVID-19 case numbers in schools, categorized by school type and district, 
+2. Are there significant differences in this correlation among various school types and regions?
 
 ## Description
 
@@ -25,7 +26,7 @@ Covid was and still is an important topic of Healthcare and our generation, we s
 
 <!-- Description of the Data source -->
 
-**Datasource1.2: by countys**
+**Datasource1.2: by counties**
 * Data URL: https://github.com/robert-koch-institut/COVID-19-Impfungen_in_Deutschland/blob/main/Deutschland_Landkreise_COVID-19-Impfungen.csv
 * Data Type: CSV
 
