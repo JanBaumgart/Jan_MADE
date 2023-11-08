@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 url = 'https://opendata.rhein-kreis-neuss.de/api/v2/catalog/datasets/rhein-kreis-neuss-flughafen-weltweit/exports/csv'
 
 # Den lokalen Dateipfad und Name für die Datenbank definieren (hier im selben Verzeichnis)
-db_path = 'airport.sqlite'
+db_path = 'airports.sqlite'
 
 # Die Daten von der URL abrufen und mit Pandas Funktion lesen (https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html#pandas-read-csv)
 data = pd.read_csv(url, sep=';')
