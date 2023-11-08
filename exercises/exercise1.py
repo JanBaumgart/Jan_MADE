@@ -14,21 +14,7 @@ data = pd.read_csv(url, sep=';')
 engine = create_engine('sqlite:///' + db_path)
 
 # Die Daten in die Datenbank einfügen (https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html)
-data.to_sql('airports', engine, if_exists='replace', index=False, dtype={
-    'column_1': 'BIGINT',  
-    'column_2': 'TEXT', 
-    'column_3': 'TEXT',  
-    'column_4': 'TEXT', 
-    'column_5': 'TEXT',  
-    'column_6': 'TEXT',  
-    'column_7': 'FLOAT',  
-    'column_8': 'FLOAT',
-    'column_9': 'BIGINT',
-    'column_10': 'FLOAT',
-    'column_11': 'TEXT',
-    'column_12': 'TEXT',
-    'geo_punkt': 'FLOAT'
-})
+data.to_sql('airports', engine, if_exists='replace', index=False)
 
 # Datenbankverbindung beenden
 engine.dispose()
