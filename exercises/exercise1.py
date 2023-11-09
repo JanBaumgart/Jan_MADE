@@ -28,8 +28,6 @@ data_types = {
     'geo_punkt': sqlalchemy.types.TEXT
 }
 
-data['column_9'] = data['column_9'].astype(float)
-
 # Eine Verbindung mit einer lokalen SQLite-Datenbank herstellen. (https://docs.sqlalchemy.org/en/20/core/engines.html)
 engine = create_engine('sqlite:///' + db_path)
 
