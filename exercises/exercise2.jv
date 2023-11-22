@@ -1,0 +1,82 @@
+// Creating pipeline
+pipeline AirportsPipeline {
+    // Defining the wireing of the pipeline
+    TrainUrlExtractor 
+        -> TrainTextFileInterpreter 
+        -> TrainCSVInterpreter 
+        -> StatusDroper
+        -> TrainTableInterpreter
+        -> TrainLoader;
+
+    // Extracting data from the DB-URL
+    block TrainUrlExtractor oftype HttpExtractor {
+
+        url: "https://download-data.deutschebahn.com/static/datasets/haltestellen/D_Bahnhof_2020_alle.CSV";
+    }
+
+    // Return the extracted data as file
+    block TrainTextFileInterpreter oftype TextFileInterpreter { }
+
+    // Split CSV data at the semicolons
+    block TrainCSVInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+    }
+
+    // Droping the 10th (J = 10) column, where 'Status' is stored.
+    block StatusDroper oftype ColumnDeleter {
+        delete: [column J];
+    }
+
+    // Defining first row as Header and defining data types of all columns
+    block TrainTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+            "EVA_NR" oftype integer,
+            "DS100" oftype text,
+            "IFOPT" oftype ValidIFOPTInput,
+            "NAME" oftype text,
+            "Verkehr" oftype ValidTrafficInput,
+            "Laenge" oftype ValidDimensionsInput,
+            "Breite" oftype ValidDimensionsInput,
+            "Betreiber_Name" oftype text,
+            "Betreiber_Nr" oftype integer,
+        ];
+    }
+
+    // Load results in sqlite database
+    block TrainLoader oftype SQLiteLoader {
+        table: "trainstops";
+        file: "./trainstops.sqlite";
+    }
+}
+
+
+
+ // Defining the Valuetype for the valid 'Verkehr' inputs that we can use on the column later.
+valuetype ValidTrafficInput oftype text {
+    constraints: [ValidTrafficValues];
+}
+
+constraint ValidTrafficValues oftype AllowlistConstraint {
+    allowlist: ['FV', 'RV', 'nur DPN'];
+}
+
+
+// Defining the Valuetype for the 'Laenge' and 'Breite'.
+valuetype ValidDimensionsInput oftype decimal {
+    constraints: [ValidDimensionsValues];
+}
+
+constraint ValidDimensionsValues on decimal:
+    value >= -90 and value <= 90;
+
+
+// Defining a Valuetype for the 'IFOPT' with the given Regex sequence.
+valuetype ValidIFOPTInput oftype text {
+    constraints: [ValidIFOPTs];
+}
+
+constraint ValidIFOPTs oftype RegexConstraint {
+    regex: /^.{2}:\d+:\d+(:\d+)?$/;
+}
+
