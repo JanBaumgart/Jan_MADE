@@ -110,9 +110,9 @@ for index, source in enumerate(sources):
         data['Datum'] = pd.to_datetime(data['Datum'], errors='coerce')
 
 
-    # Die Daten in die Datenbank einfügen, bzw. erweitern. Zudem wird eine Nachricht ausgegeben die bestätigt dass eine Quelle erfolgreich in SQL eingelesen wurde.
-    data.to_sql(table_name, engine, if_exists='append', index=False, dtype=data_types[index])
-    print(f'Datenquelle: {index}: {table_name} erfolgreich eingelesen')
+    # Die Daten in die Datenbank einfügen, bzw. ersetzen mit neuen Daten. Zudem wird eine Nachricht ausgegeben die bestätigt dass eine Quelle erfolgreich in SQL eingelesen wurde.
+    data.to_sql(table_name, engine, if_exists='replace', index=False, dtype=data_types[index])
+    print(f'Datenquelle {index}: {table_name} erfolgreich eingelesen')
 
 # Datenbankverbindung beenden
 engine.dispose()
