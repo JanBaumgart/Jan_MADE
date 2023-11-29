@@ -32,13 +32,13 @@ pipeline AirportsPipeline {
         header: true;
         columns: [
             "EVA_NR" oftype integer,
-            "DS100" oftype text,
+            "DS100" oftype NoEmptyTextValue,
             "IFOPT" oftype ValidIFOPTInput,
-            "NAME" oftype text,
+            "NAME" oftype NoEmptyTextValue,
             "Verkehr" oftype ValidTrafficInput,
             "Laenge" oftype ValidDimensionsInput,
             "Breite" oftype ValidDimensionsInput,
-            "Betreiber_Name" oftype text,
+            "Betreiber_Name" oftype NoEmptyTextValue,
             "Betreiber_Nr" oftype integer,
         ];
     }
@@ -80,3 +80,12 @@ constraint ValidIFOPTs oftype RegexConstraint {
     regex: /^.{2}:\d+:\d+(:\d+)?$/;
 }
 
+valuetype NoEmptyTextValue oftype text{
+        constraints: [NoEmptyText];
+    }
+
+constraint NoEmptyText oftype LengthConstraint {
+    minLength: 1;
+    }
+
+    
