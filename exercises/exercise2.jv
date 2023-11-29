@@ -86,6 +86,7 @@ valuetype NoEmptyTextValue oftype text{
 
 constraint NoEmptyText oftype LengthConstraint {
     minLength: 1;
+    maxLength: 1000;
     }
 
     
