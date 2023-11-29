@@ -2,6 +2,8 @@ import pandas as pd
 import sqlalchemy
 from sqlalchemy import create_engine
 
+
+
 # Liste der URLs in der 'sources' Liste speichern um sie später nacheinander abzurufen.
 sources = [
     # Impfungen nach Bundesländern:
@@ -16,9 +18,10 @@ sources = [
     # Kreisfreie Städte und Landkreise nach Fläche, Bevölkerung und Bevölkerungsdichte
     'https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.xlsx?__blob=publicationFile', 
     
-    # Schüleranzahl in SH nach Schularten.
-    'data/pupil_count.csv'
+    # Schüleranzahl in SH nach Schularten 22/23.
+    'https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bildung-Forschung-Kultur/Schulen/Publikationen/Downloads-Schulen/statistischer-bericht-sm-schueler-5211003238005.xlsx?__blob=publicationFile'
 ]
+
 
 # Namen für die Tabellen deklarieren um sie später in der SQL Tabelle mit diesem Namen zu speichern.
 table_names = [
@@ -28,6 +31,7 @@ table_names = [
     'Kreisfreie_Staedte_Landkreise',
     'Schueleranzahl_SH'
 ]
+
 
 # Deklaration der Datentypen der Spalten für jede Datenquelle.
 data_types = [
@@ -41,12 +45,12 @@ data_types = [
      'NUTS3': sqlalchemy.types.TEXT, 'Fläche in km2': sqlalchemy.types.FLOAT, 'insgesamt': sqlalchemy.types.BIGINT,
      'männlich': sqlalchemy.types.BIGINT,'weiblich': sqlalchemy.types.BIGINT,'je km2': sqlalchemy.types.INTEGER},
     
-    {'Bundeslaender': sqlalchemy.types.TEXT, 'Schulart': sqlalchemy.types.TEXT, 'Klassenstufe': sqlalchemy.types.TEXT,  
-     'maennlich19/20': sqlalchemy.types.BIGINT, 'weiblich19/20': sqlalchemy.types.BIGINT, 'insgesamt19/20': sqlalchemy.types.BIGINT, 
-     'maennlich20/21': sqlalchemy.types.BIGINT, 'weiblich20/21': sqlalchemy.types.BIGINT, 'insgesamt20/21': sqlalchemy.types.BIGINT, 
-     'maennlich21/22': sqlalchemy.types.BIGINT, 'weiblich21/22': sqlalchemy.types.BIGINT, 'insgesamt21/22': sqlalchemy.types.BIGINT, 
-     'maennlich22/23': sqlalchemy.types.BIGINT, 'weiblich22/23': sqlalchemy.types.BIGINT, 'insgesamt22/23': sqlalchemy.types.BIGINT}
+    {'Statistik_Code': sqlalchemy.types.INTEGER, 'Statistik_Label': sqlalchemy.types.TEXT, 'Schuljahr': sqlalchemy.types.TEXT, 'Bundesland': sqlalchemy.types.TEXT, 
+     'Schulbereich': sqlalchemy.types.TEXT, 'Schulart': sqlalchemy.types.TEXT, 'Bildungsbereich': sqlalchemy.types.TEXT, 'Geschlecht': sqlalchemy.types.TEXT,
+     'Schueler_innen_Anzahl': sqlalchemy.types.BIGINT, 'Geschlechtsverteilung_Prozent': sqlalchemy.types.FLOAT, 'Verteilung_Schulart_Prozent': sqlalchemy.types.FLOAT, 
+     'Verteilung_Schulbereich_Prozent': sqlalchemy.types.FLOAT}
 ]
+
 
 
 # Das Verzeichnis für die SQLLite Datenbank festlegen, hier also unter dem Ordner 'data'.
@@ -57,50 +61,58 @@ db_path = 'data/data.sqlite'
 engine = create_engine('sqlite:///' + db_path)
 
 
+
+
 # HAUPTBEREICH: Eine Schleife, die durch die Datenquellen geht und die Daten in den Tabellen in der bereitgestellten Datenbank speichert.
 for index, source in enumerate(sources): 
 
-    # Überprüfen, ob die Quelle eine URL ist (ausschliesen der lokalen Quelle)  
-    if source.startswith('http'):  
-    
+
+     # Excel-Quelle mit Bevölkerungszahlen in SH
+    if '04-kreise.xlsx' in source: 
+            
+        # Die Daten von der URL als Excel-Datei abrufen und lesen
+        data = pd.read_excel(source, sheet_name='Kreisfreie Städte u. Landkreise', skiprows=7, na_filter=False)
+            
+        # Header werden selbst definiert, weil der richtige Header nicht festgelegt werden kann, weil er über zwei Zeilen verteilt ist.
+        data.columns = ['Schlüssel-nummer', 'Regionale Bezeichnung', 'Kreis / Landkreis', 'NUTS3', 'Fläche in km2',
+                        'insgesamt', 'männlich', 'weiblich', 'je km2']
         
-        # Excel-Quelle (destatis)
-        if '.xlsx' in source: 
+        # Filtert die Daten nach SH, weil nur diese gebraucht werden.
+        # WICHTIG: '.astype' wird genutzt damit Nullwerte auch als Leere Strings eingelesen und übersprungen werden können (sonst Type Error).
+        data = data[data['Schlüssel-nummer'].astype(str).str.startswith('01')] 
+        
+        
+    
+    # Excel mit Schülerzahlen in SH einlesen
+    elif '5211003238005.xlsx' in source: 
             
-            # Die Daten von der URL als Excel-Datei abrufen und lesen
-            data = pd.read_excel(source, sheet_name='Kreisfreie Städte u. Landkreise', skiprows=7, na_filter=False)
+        # Die Daten von der URL als Excel-Datei abrufen und lesen
+        data = pd.read_excel(source, sheet_name='csv-21100-01', na_filter=False)
+        
+        data = data[data['Bundesland'].str.startswith('Schleswig-Holstein')]       
+
             
-            # Header werden selbst definiert, weil der richtige Header nicht festgelegt werden kann, weil er über zwei Zeilen verteilt ist.
-            data.columns = ['Schlüssel-nummer', 'Regionale Bezeichnung', 'Kreis / Landkreis', 'NUTS3', 'Fläche in km2',
-                               'insgesamt', 'männlich', 'weiblich', 'je km2']
             
-            # Filtert die Daten nach SH, weil nur diese gebraucht werden.
-            # WICHTIG: '.astype' wird genutzt damit Nullwerte auch als Leere Strings eingelesen und übersprungen werden können (sonst Type Error).
-            data = data[data['Schlüssel-nummer'].astype(str).str.startswith('01')] 
+    # 'Impfungen_Bundeslaender' Quelle abrufen und nach SH filtern.
+    elif source.endswith('Bundeslaender_COVID-19-Impfungen.csv'):
+        data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True, dtype={'BundeslandId_Impfort': str})
+        data = data[data['BundeslandId_Impfort'] == '01']            
             
-        # 'Impfungen_Bundeslaender' Quelle abrufen und nach SH filtern.
-        elif source.endswith('Bundeslaender_COVID-19-Impfungen.csv'):
-            data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True, dtype={'BundeslandId_Impfort': str})
-            data = data[data['BundeslandId_Impfort'] == '01']            
             
-        # 'Impfungen_Landkreise' Quelle abrufen und nach SH filtern.
-        elif source.endswith('Landkreise_COVID-19-Impfungen.csv'):
-            data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True, dtype={'LandkreisId_Impfort': str})
-            data = data[data['LandkreisId_Impfort'].str[:2] == '01']    
+    # 'Impfungen_Landkreise' Quelle abrufen und nach SH filtern.
+    elif source.endswith('Landkreise_COVID-19-Impfungen.csv'):
+        data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True, dtype={'LandkreisId_Impfort': str})
+        data = data[data['LandkreisId_Impfort'].str[:2] == '01']    
             
-        # 'Covid_Faelle_Schultypen' einlesen (besteht nur aus SH Daten, deshalb keine Filterung).
-        else:
-            data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True)
-       
             
-    # lokale Quelle, mit den Schülerzahlen in SH, einlesen.
+    # 'Covid_Faelle_Schultypen' einlesen (besteht nur aus SH Daten, deshalb keine Filterung).
     else:
-        data = pd.read_csv(source, sep=';', on_bad_lines='skip', skip_blank_lines=True)
+        data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True)
+
 
 
     # die Tabelle des aktuellen Index korrekt benennen (wie zurvor definiert).
     table_name = table_names[index]
-    
     
     # Konvertierung der Datums-Spalten, weil sie sonst nicht von der 'to_sql' funktion als DATETIME type gespeichert werden können ( -> type error).
     if 'Impfdatum' in data.columns:
@@ -112,7 +124,7 @@ for index, source in enumerate(sources):
 
     # Die Daten in die Datenbank einfügen, bzw. ersetzen mit neuen Daten. Zudem wird eine Nachricht ausgegeben die bestätigt dass eine Quelle erfolgreich in SQL eingelesen wurde.
     data.to_sql(table_name, engine, if_exists='replace', index=False, dtype=data_types[index])
-    print(f'Datenquelle {index}: {table_name} erfolgreich eingelesen')
+    print(f'Datenquelle {index + 1}: {table_name} erfolgreich eingelesen')
 
 # Datenbankverbindung beenden
 engine.dispose()
