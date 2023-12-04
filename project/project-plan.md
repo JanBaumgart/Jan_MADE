@@ -41,9 +41,10 @@ A collection of data showing the vaccination rates broken down by counties (in S
 The data source provides data on COVID-19 cases at schools, separated by type of school in Germany
 
 
-### Datasource3: Pupils in Schleswig Holstein by school type in total
-* Data URL: https://www-genesis.destatis.de/genesis//online?operation=table&code=21111-0011&bypass=true&levelindex=0&levelid=1698693849295#abreadcrumb
-* Data Type: CSV
+### Datasource3: Pupils in Germany by Schooltype in 2021/2022
+* Metadata URL: https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bildung-Forschung-Kultur/Schulen/_inhalt.html#_ccbho9pou
+* Data URL: https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bildung-Forschung-Kultur/Schulen/Publikationen/Downloads-Schulen/statistischer-bericht-allgemeinbildende-schulen-2110100227005.xlsx?__blob=publicationFile
+* Data Type: XLSX
 * License: Data licence Germany – attribution – version 2.0 (https://www.destatis.de/EN/Service/Legal-Notice/CopyrightGENESISOnlineDatabase.html)
 
 The data from the Federal Statistical Office shows the number of pupils, broken down by federal state, school year, gender, school type and year group
@@ -61,7 +62,11 @@ This data (also from the Federal Statistical Office) provides an overview of all
 ## Work Packages
 
 1. Explore Datasources [#1][i1]
-2. Build Pipeline [#2][i2]
+2. Build and improve Pipeline [#2][i2]
+3. Implement automated tests [#3][i3]
+4. Improve the Structure of Data in the Repository [#4][i4]
 
 [i1]: https://github.com/JanBaumgart/Jan_MADE/issues/1
 [i2]: https://github.com/JanBaumgart/Jan_MADE/issues/2
+[i3]: https://github.com/JanBaumgart/Jan_MADE/issues/3
+[i4]: https://github.com/JanBaumgart/Jan_MADE/issues/4

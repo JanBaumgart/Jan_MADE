@@ -1,2 +1,3 @@
 #!/bin/bash
-python project/data_pipeline.py
+python data/data_pipeline.py
+read -p "Pipeline ausgeführt, drücke Enter um das Fenster zu schliessen"
