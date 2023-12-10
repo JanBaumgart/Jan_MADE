@@ -46,7 +46,7 @@ def test_data_in_database():
     cursor = conn.cursor()
     
     expected_tables = ['Impfungen_SH', 'Impfungen_SH_LandKreise', 'Covid_Faelle_nach_Schultypen',
-                       'Bewohneranzahl_SH_LandKreise', 'Schueleranzahl_SH_21_22']
+                       'Bewohneranzahl_SH_LandKreise', 'Schueleranzahl_SH_21_22', 'Covid_Faelle_an_Schulen_nach_Landkreisen']
     
     for table_name in expected_tables:
         cursor.execute(f'PRAGMA table_info({table_name})')

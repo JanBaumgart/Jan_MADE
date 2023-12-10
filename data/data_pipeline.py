@@ -19,7 +19,10 @@ sources = [
     'https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.xlsx?__blob=publicationFile', 
     
     # Schüleranzahl in SH nach Schularten 2022/23.
-    'https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bildung-Forschung-Kultur/Schulen/Publikationen/Downloads-Schulen/statistischer-bericht-allgemeinbildende-schulen-2110100227005.xlsx?__blob=publicationFile'
+    'https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bildung-Forschung-Kultur/Schulen/Publikationen/Downloads-Schulen/statistischer-bericht-allgemeinbildende-schulen-2110100227005.xlsx?__blob=publicationFile',
+    
+    # Covid Fälle an Schulen nach Landkreisen
+    'https://opendata.schleswig-holstein.de/dataset/acd37a65-b4ad-4abd-b318-a39fc37838f7/resource/5c7d0685-5ec2-441c-ab9e-dc5a691bef29/download/data.csv'
 ]
 
 
@@ -29,7 +32,8 @@ table_names = [
     'Impfungen_SH_LandKreise',
     'Covid_Faelle_nach_Schultypen',
     'Bewohneranzahl_SH_LandKreise',
-    'Schueleranzahl_SH_21_22'
+    'Schueleranzahl_SH_21_22',
+    'Covid_Faelle_an_Schulen_nach_Landkreisen'
 ]
 
 
@@ -48,7 +52,9 @@ data_types = [
     {'Statistik_Code': sqlalchemy.types.INTEGER, 'Statistik_Label': sqlalchemy.types.TEXT, 'Schuljahr': sqlalchemy.types.TEXT, 'Bundesland': sqlalchemy.types.TEXT, 
      'Schulbereich': sqlalchemy.types.TEXT, 'Schulart': sqlalchemy.types.TEXT, 'Bildungsbereich': sqlalchemy.types.TEXT, 'Geschlecht': sqlalchemy.types.TEXT,
      'Schueler_innen_Anzahl': sqlalchemy.types.BIGINT, 'Geschlechtsverteilung_Prozent': sqlalchemy.types.FLOAT, 'Verteilung_Schulart_Prozent': sqlalchemy.types.FLOAT, 
-     'Verteilung_Schulbereich_Prozent': sqlalchemy.types.FLOAT}
+     'Verteilung_Schulbereich_Prozent': sqlalchemy.types.FLOAT},
+    
+    {'Datum': sqlalchemy.types.Date, 'Kreis': sqlalchemy.types.TEXT, 'Gruppe': sqlalchemy.types.TEXT, 'Anzahl': sqlalchemy.types.INTEGER}
 ]
 
 
@@ -130,20 +136,18 @@ def run_data_pipeline():
             data = data.loc[data['Altersgruppe'].isin(['05-11', '12-17'])]
             data = data.drop(columns=['Impfschutz'])    
         
-        
+                
         
         #---------------------------------------        
-        # CSV 'Covid_Faelle_Schultypen' einlesen (besteht nur aus SH Daten, deshalb keine Filterung).
+        # CSV 'Covid_Faelle_Schultypen' und 'Covid_Faelle_an_Schulen_nach_Landkreisen' einlesen (besteht nur aus SH Daten und haben gleiche Strucktur).
         else:
             data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True)
             
             # Nur Schüler und Schülerinnen beachten und Lehrkräfte rausrechnen.
             data = data[data['Gruppe'] == 'Schülerinnen / Schüler']
             
-            # Gruppen Spalte entfernen, weil sie nicht mehr gebraucht wird, weil nur noch Schüler darin sind
+            # Gruppen Spalten entfernen, weil sie nicht mehr gebraucht wird, weil nur noch Schüler darin sind
             data = data.drop(columns=['Gruppe'])
-
-
 
         #---------------------------------------
         # die Tabelle des aktuellen Index korrekt benennen (wie zurvor definiert).

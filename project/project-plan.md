@@ -5,7 +5,7 @@ Correlation between Covid-19 vaccination rate and school types / regions in Schl
 
 ## Main Question
 
-1. To what extent does the vaccination rate in Schleswig-Holstein correlate with COVID-19 case numbers in schools, categorized by school type and district, 
+1. To what extent does the vaccination rate in Schleswig-Holstein correlate with COVID-19 case numbers in schools, categorized by school type.
 2. Are there significant differences in this correlation among various school types and regions?
 
 ## Description
@@ -58,6 +58,12 @@ The data from the Federal Statistical Office shows the number of pupils, broken 
 
 This data (also from the Federal Statistical Office) provides an overview of all independent cities and districts by area, population and population density
 
+### Datasource5: Number of COVID-19 cases at schools by counties
+* Metadata URL: https://www.govdata.de/web/guest/suchen/-/details/anzahl-der-covid-19-falle-an-schulen-nach-kreisen
+* Data URL. https://opendata.schleswig-holstein.de/dataset/acd37a65-b4ad-4abd-b318-a39fc37838f7/resource/5c7d0685-5ec2-441c-ab9e-dc5a691bef29/download/data.csv
+* Data Type: CSV
+* License: Public Domain Mark 1.0 (PDM) (https://creativecommons.org/publicdomain/mark/1.0/)
+
 
 ## Work Packages
 
@@ -65,8 +71,10 @@ This data (also from the Federal Statistical Office) provides an overview of all
 2. Build and improve Pipeline [#2][i2]
 3. Implement automated tests [#3][i3]
 4. Improve the Structure of Data in the Repository [#4][i4]
+5. Adding another source for the complete analysis [#5][i5]
 
 [i1]: https://github.com/JanBaumgart/Jan_MADE/issues/1
 [i2]: https://github.com/JanBaumgart/Jan_MADE/issues/2
 [i3]: https://github.com/JanBaumgart/Jan_MADE/issues/3
 [i4]: https://github.com/JanBaumgart/Jan_MADE/issues/4
+[i5]: https://github.com/JanBaumgart/Jan_MADE/issues/5
