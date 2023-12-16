@@ -17,6 +17,12 @@ jobs:
       with:
         python-version: 3.11
 
+   # Installiere pytest
+    - name: Installiere pytest
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
       # Ausführen der tests.sh Datei.
     - name: Führe Tests aus
       run: bash project/tests.sh
