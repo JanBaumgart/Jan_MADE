@@ -4,8 +4,6 @@ import sqlite3
 import pytest
 from data_pipeline import run_data_pipeline, sources, table_names
 
-
-
 #------------
 # TEST1: ob die Verbindungen mit den 5 Datenquellen funktionieren
 def test_datasources_connection():
