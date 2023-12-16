@@ -2,15 +2,8 @@ import os
 import requests
 import sqlite3
 import pytest
+import pytest-dependency
 from data_pipeline import run_data_pipeline, sources, table_names
-
-
-
-# Konfigurieren der Dependency Pytest Funktion, um Warnungen im Pytest zu beheben.
-def pytest_configure(config):
-    config.addinivalue_line("markers", "dependency: mark a test as a dependency")
-
-
 
 #------------
 # TEST1: ob die Verbindungen mit den 5 Datenquellen funktionieren
