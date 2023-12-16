@@ -25,6 +25,7 @@ jobs:
         pip install requests
         pip install pandas
         pip install sqlalchemy
+        pip install openpyxl
         
 
       # Ausführen der tests.sh Datei.
