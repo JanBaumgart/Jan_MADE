@@ -2,7 +2,7 @@ import os
 import requests
 import sqlite3
 import pytest
-import pytest-dependency
+import pytest_dependency
 from data_pipeline import run_data_pipeline, sources, table_names
 
 #------------
