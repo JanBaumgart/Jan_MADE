@@ -1,0 +1,14 @@
+name: Tests auf Push
+
+on: push
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Repository in Actions laden
+      uses: actions/checkout@v2
+
+    - name: Führe Tests aus
+      run: bash project/tests.sh
