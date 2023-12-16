@@ -6,9 +6,17 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
+      # Das repository bereitstellen für Github actions
     steps:
-    - name: Repository in Actions laden
+    - name: Loading repository
       uses: actions/checkout@v2
 
+      # Python 3.11 laden
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+      # Ausführen der tests.sh Datei.
     - name: Führe Tests aus
       run: bash project/tests.sh
