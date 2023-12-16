@@ -18,13 +18,15 @@ jobs:
         python-version: 3.11
 
    # Installiert erforderliche Module für die Tests
-    - name: Installiere pytest
+    - name: Installing Modules
       run: |
         python -m pip install --upgrade pip
         pip install pytest
         pip install requests
         pip install pandas
+        pip install sqlalchemy
+        
 
       # Ausführen der tests.sh Datei.
-    - name: Führe Tests aus
+    - name: execute tests
       run: bash project/tests.sh
