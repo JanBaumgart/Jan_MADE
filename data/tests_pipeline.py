@@ -6,6 +6,8 @@ from data_pipeline import run_data_pipeline, sources, table_names
 
 #------------
 # TEST1: ob die Verbindungen mit den 5 Datenquellen funktionieren
+# Dependency Nutzen um andere Funktionen davon abhängig zu machen.
+@pytest.mark.dependency()
 def test_datasources_connection():
     for index, source in enumerate(sources):
         response = requests.get(source)
