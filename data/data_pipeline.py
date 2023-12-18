@@ -73,7 +73,6 @@ print('Der Datenabruf wird gestartet...')
 # Ausführung des Hauptteil des Skripts in einer Funktion, um es auch anderswo wieder aufzurufen (z.B. im Test-Skript)
 def run_data_pipeline():
     
-    # Es wird zum start die Info an den Nutzer ausgegeben, dass der Datenabruf aus den Quellen erfolgreich gestartet hat.
     # Eine Schleife, die durch die Datenquellen geht und die Daten in den passenden Tabellen in der bereitgestellten Datenbank speichert.
     for index, source in enumerate(sources): 
 
