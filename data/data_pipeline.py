@@ -39,9 +39,9 @@ table_names = [
 
 # Deklaration der Datentypen der Spalten für jede Datenquelle.
 data_types = [
-    {'Impfdatum': sqlalchemy.types.Date,'Impfstoff': sqlalchemy.types.TEXT, 'Impfserie': sqlalchemy.types.INTEGER, 'Anzahl': sqlalchemy.types.BIGINT},
+    {'Impfdatum': sqlalchemy.types.Date,'Impfstoff': sqlalchemy.types.TEXT, 'Impfserie': sqlalchemy.types.INTEGER, 'Anzahl': sqlalchemy.types.INTEGER},
     
-    {'Impfdatum': sqlalchemy.types.Date, 'Altersgruppe': sqlalchemy.types.TEXT, 'Impfschutz': sqlalchemy.types.INTEGER, 'Anzahl': sqlalchemy.types.BIGINT},
+    {'Impfdatum': sqlalchemy.types.Date, 'Altersgruppe': sqlalchemy.types.TEXT, 'Impfschutz': sqlalchemy.types.INTEGER, 'Anzahl': sqlalchemy.types.INTEGER},
     
     {'Datum': sqlalchemy.types.Date, 'Schulart': sqlalchemy.types.TEXT, 'Gruppe': sqlalchemy.types.TEXT, 'Anzahl': sqlalchemy.types.BIGINT},
     
@@ -86,12 +86,12 @@ def run_data_pipeline():
                 
             # Header werden selbst definiert, weil der richtige Header nicht festgelegt werden kann, weil er über zwei Zeilen verteilt ist.
             data.columns = ['Schlüssel-nummer', 'Regionale Bezeichnung', 'Kreis / Landkreis', 'NUTS3', 'Fläche in km2',
-                            'insgesamt', 'männlich', 'weiblich', 'je km2']
+                            'Bewohner', 'männlich', 'weiblich', 'je km2']
             
             # Filtert die Daten nach SH, weil nur diese gebraucht werden.
             # WICHTIG: '.astype' wird genutzt damit Nullwerte auch als Leere Strings eingelesen und übersprungen werden können (sonst Type Error).
             data = data[data['Schlüssel-nummer'].astype(str).str.startswith('01')]
-            data = data.drop(columns=['Regionale Bezeichnung', 'NUTS3', 'Fläche in km2'])
+            data = data.drop(columns=['Regionale Bezeichnung', 'NUTS3', 'Fläche in km2', 'männlich', 'weiblich', 'je km2'])
             
             
         #---------------------------------------
@@ -124,6 +124,7 @@ def run_data_pipeline():
             data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True, dtype={'BundeslandId_Impfort': str})
             data = data[data['BundeslandId_Impfort'] == '01']  
             data = data.drop(columns=['BundeslandId_Impfort', 'Impfstoff', 'Impfserie'])
+            data = data.groupby(['Impfdatum']).agg({'Anzahl': 'sum' }).reset_index()
                 
                 
                 
@@ -133,8 +134,8 @@ def run_data_pipeline():
             data = pd.read_csv(source, sep=',', on_bad_lines='skip', skip_blank_lines=True, dtype={'LandkreisId_Impfort': str})
             data = data[data['LandkreisId_Impfort'].str.startswith('01')]  
             data = data.loc[data['Altersgruppe'].isin(['05-11', '12-17'])]
-            data = data.drop(columns=['Impfschutz'])    
-        
+            data = data.drop(columns=['Impfschutz']) 
+            data = data.groupby(['Impfdatum', 'LandkreisId_Impfort']).agg({'Anzahl': 'sum' }).reset_index()
                 
         
         #---------------------------------------        
