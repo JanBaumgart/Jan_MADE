@@ -10,11 +10,11 @@ Correlation between Covid-19 vaccination rate and school types / regions in Schl
 
 ## Description
 
-Covid was and still is an important topic of Healthcare and our generation, we should get as much knowledge out of it as possible. I am going to analyse the relationship between the COVID-19 vaccination rate and the incidence of COVID-19 cases in various schools and different regions within Schleswig-Holstein. Schools will be separated by different School Types and the Regions will be separated in 4 clusters to see if they behave differently. The goal is to derive possible recommendations for future behavior in vaccination projects.
+Covid was and still is an important topic of Healthcare and our generation, we should get as much knowledge out of it as possible. I am going to analyse the relationship between the COVID-19 vaccination rate and the incidence of COVID-19 cases in various schools and different regions within Schleswig-Holstein. Schools will be separated by different School Types and the Regions will be separated in the counties of SH to see if they behave differently. The goal is to derive possible recommendations for future behavior in vaccination projects.
 
 ## Datasources
 
-### Datasource1: COVID_19 Vacination Rates 
+### Datasource1: COVID_19 Vaccination Rates 
 * Metadata URL: https://www.govdata.de/web/guest/suchen/-/details/covid-19-impfungen-in-deutschland0aef2
 * License: Public Domain Mark 1.0 (PDM) (https://creativecommons.org/publicdomain/mark/1.0/)
 
