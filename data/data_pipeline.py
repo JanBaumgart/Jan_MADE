@@ -149,9 +149,6 @@ def run_data_pipeline():
             # Gruppen Spalten entfernen, weil sie nicht mehr gebraucht wird, weil nur noch Schüler darin sind
             data = data.drop(columns=['Gruppe'])
 
-        #---------------------------------------
-        # die Tabelle des aktuellen Index korrekt benennen (wie zurvor definiert).
-        table_name = table_names[index]
         
         
         #--------------------------------------- 
@@ -164,6 +161,10 @@ def run_data_pipeline():
             data['Datum'] = pd.to_datetime(data['Datum'], errors='coerce')
 
 
+
+        #---------------------------------------
+        # die Tabelle des aktuellen Index korrekt benennen (wie zurvor definiert).
+        table_name = table_names[index]
 
         #--------------------------------------- 
         # Die Daten in die Datenbank einfügen, bzw. falls möglich ersetzen mit neuen Daten. 
