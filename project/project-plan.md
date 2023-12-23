@@ -72,9 +72,11 @@ This data (also from the Federal Statistical Office) provides an overview of all
 3. Implement automated tests [#3][i3]
 4. Improve the Structure of Data in the Repository [#4][i4]
 5. Adding another source for the complete analysis [#5][i5]
+6. Create a final report for the project [#6][i6]
 
 [i1]: https://github.com/JanBaumgart/Jan_MADE/issues/1
 [i2]: https://github.com/JanBaumgart/Jan_MADE/issues/2
 [i3]: https://github.com/JanBaumgart/Jan_MADE/issues/3
 [i4]: https://github.com/JanBaumgart/Jan_MADE/issues/4
 [i5]: https://github.com/JanBaumgart/Jan_MADE/issues/5
+[i6]: https://github.com/JanBaumgart/Jan_MADE/issues/6
