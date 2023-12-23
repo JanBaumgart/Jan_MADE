@@ -1,4 +1,4 @@
-# Correlation between the Covid-19 vaccination rate in various school types and regions in Schleswig-Holstein, Germany
+# Correlation of the Covid-19 vaccination rate and the pupil in various school types and regions in Schleswig-Holstein, Germany
 
 ## description of the project
 
