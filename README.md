@@ -1,3 +1,6 @@
+![Python ](https://img.shields.io/badge/Python-3.11-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 # Correlation of the Covid-19 vaccination rate and the pupil in various school types and regions in Schleswig-Holstein, Germany
 
 ## Description of the project
