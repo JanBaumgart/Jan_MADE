@@ -1,0 +1,10 @@
+// Creating pipeline
+pipeline exercise4Pipeline {
+
+//defining the wireing of the pipeline
+TrainUrlExtractor
+    ->
+
+
+
+}
