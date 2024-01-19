@@ -1,6 +1,11 @@
+![Python ](https://img.shields.io/badge/Python-3.11-blue)
+![License](https://img.shields.io/badge/License-MIT-orange)
+
 # Correlation of the Covid-19 vaccination rate and the pupil in various school types and regions in Schleswig-Holstein, Germany
 
-## description of the project
+## Description of the project
+
+![ProjectStockPic](https://github.com/JanBaumgart/Jan_MADE/blob/main/Stock-Pic_Corona_SH.jpg)
 
 The project has the goal to untangle the connection between the COVID-19 vaccination rate and the number of cases in schools, respectively different regions of Schleswig-Holstein if there is one. 
 
