@@ -1,10 +1,76 @@
+//Create the 'function' that translates Celsius Temperatur in Fahrenheit
+transform TempConverter {
+  from Celsius oftype decimal;
+  to Fahrenheit oftype decimal;
+  Fahrenheit: (Celsius * 9/5) + 32;
+}
+
+
+
 // Creating pipeline
 pipeline exercise4Pipeline {
 
 //defining the wireing of the pipeline
-TrainUrlExtractor
-    ->
+    URLextractor
+        ->DataPicker
+        ->TextInterpreter
+        ->CSVInterpreter
+        ->ColDeleter
+        ->ColDataSelector
+        ->TableDataInterpreter
+        ->TempTransformer1
+        ->TempTransformer2
+        ->DataLoader;
 
 
+
+    // Extracting data from the URL and unzips it into a Filesystem
+    block URLextractor oftype GTFSExtractor {
+        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
+    }
+
+    // Pick the data file and ignore the README in the Filesystem
+    block DataPicker oftype FilePicker{ path: "/data.csv"; }
+
+    // Interpret the File as a Textfile and then as a CSV Sheet
+    block TextInterpreter oftype TextFileInterpreter {}
+    block CSVInterpreter oftype CSVInterpreter { delimiter: ";"; }
+
+    // Delete unwanted Columns and create a new sheet of the old one (serves the rename process and delets the clumns that are unwanted in the end)
+    block ColDeleter oftype ColumnDeleter { delete: [column F, column G, column H, column I]; }
+    block ColDataSelector oftype CellRangeSelector { select: range A1:K*; }
+
+    // Interpret the CSV Sheet as a table with assigned Datatypes and new Names
+    block TableDataInterpreter oftype TableInterpreter {
+        header: false;
+        columns: 
+        [
+            "Geraet" oftype integer, 
+            "Hersteller" oftype text, 
+            "Model" oftype text, 
+            "Monat" oftype integer,
+            "Temperatur" oftype decimal, 
+            "Batterietemperatur" oftype decimal, 
+            "Geraet aktiv" oftype text, 
+        ];
+    }
+
+    // Translate the two Temperatur Columns from Celsius into Fahrenheit, using the earlier set up 'TempConverter' function.   
+    block TempTransformer1 oftype TableTransformer{
+        inputColumns: ['Temperatur'];
+        outputColumn: 'Temperatur';
+        use: TempConverter;
+    }
+    block TempTransformer2 oftype TableTransformer {
+        inputColumns: ['Batterietemperatur'];
+        outputColumn: 'Batterietemperatur';
+        use: TempConverter;
+    }
+
+    block DataLoader oftype SQLiteLoader 
+    { 
+        table: "temperatures"; 
+        file: "./temperatures.sqlite"; 
+    }
 
 }
