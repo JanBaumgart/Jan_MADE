@@ -1,12 +1,3 @@
-//Create the 'function' that translates Celsius Temperatur in Fahrenheit
-transform TempConverter {
-  from Celsius oftype decimal;
-  to Fahrenheit oftype decimal;
-  Fahrenheit: (Celsius * 9/5) + 32;
-}
-
-
-
 // Creating pipeline
 pipeline exercise4Pipeline {
 
@@ -45,7 +36,7 @@ pipeline exercise4Pipeline {
         header: false;
         columns: 
         [
-            "Geraet" oftype integer, 
+            "Geraet" oftype ValidID, 
             "Hersteller" oftype text, 
             "Model" oftype text, 
             "Monat" oftype integer,
@@ -74,3 +65,18 @@ pipeline exercise4Pipeline {
     }
 
 }
+
+//Create the 'function' that translates Celsius Temperatur in Fahrenheit
+transform TempConverter {
+  from Celsius oftype decimal;
+  to Fahrenheit oftype decimal;
+  Fahrenheit: (Celsius * 9/5) + 32;
+}
+
+valuetype ValidID oftype integer{
+        constraints: [minID];
+    }
+
+constraint minID oftype RangeConstraint {
+    lowerBound: 1;
+    }
