@@ -32,7 +32,9 @@ df = pd.read_csv(file, usecols = columns)
 df = df[df["zone_id"] == 2001]
 
 
-# Nach Überprüfung: 'stop_name' behält bereits die deutschen Umlaute, es bedarf also dessen keiner Validierung
+# Nach Überprüfung: 'stop_name' behält bereits die deutschen Umlaute.
+# Zur Sicherheit: Spalte "stop_name" auf jeden Fall als string lesen.
+df["stop_name"] = df["stop_name"].astype(str)
 
 # Die Spanne der validen Daten festlegen und auf die Spalten anwenden 
 valid_coordinate_range = (-90, 90)
